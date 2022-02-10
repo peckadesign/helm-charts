@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  preview-app:
+  - apiVersion: v2
+    created: "2022-02-10T09:25:43.968086878+01:00"
+    description: PeckaDesign Preview App Chart
+    digest: 3927e78c307c9973d5c1977c09367184e00112670106b4ba5d3baaf6aec3cb3b
+    name: preview-app
+    type: application
+    urls:
+    - packages/preview-app-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-02-10T09:25:43.967751664+01:00"

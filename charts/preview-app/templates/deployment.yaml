@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-        rollme: {{ randAlphaNum 5 | quote }}
+        commit-hash: {{ .Values.commitHash }}
       labels:
         app: test-{{ .Values.imageTag }}
     spec:

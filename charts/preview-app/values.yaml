@@ -1,6 +1,7 @@
 projectName: ''
 registry: ''
-imageTag: "staging"
+imageTag: 'staging'
+commitHash: ''
 projects:
   - name: ''
 

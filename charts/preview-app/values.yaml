@@ -1,0 +1,8 @@
+projectName: ''
+registry: ''
+imageTag: "staging"
+projects:
+  - name: ''
+
+redisContainer: true
+mountVolumes: true

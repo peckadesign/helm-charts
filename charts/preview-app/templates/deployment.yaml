@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-{{ .Values.imageTag }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    environment: test-{{ .Values.imageTag }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: test-{{ .Values.imageTag }}
+  template:
+    metadata:
+      labels:
+        app: test-{{ .Values.imageTag }}
+    spec:
+      containers:
+        - name: test-{{ .Values.imageTag }}
+          image: {{ .Values.registry}}{{ .Values.projectName }}:{{ .Values.imageTag }}
+          imagePullPolicy: Always
+          {{ if .Values.mountVolumes }}
+          volumeMounts:
+          {{ end }}
+
+          {{- range $volume := .Values.volumes }}
+            - mountPath: {{ $volume.mountPath }}
+              name: data
+              subPath: {{ $volume.subPath }}
+
+          {{ end }}
+
+
+      {{ if .Values.redisContainer }}
+        - name: redis
+          image: redis:alpine
+          ports:
+            - containerPort: 6379
+      {{ end }}
+
+      {{ if .Values.mountVolumes }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.projectName }}-nfs-pvc
+      {{ end }}

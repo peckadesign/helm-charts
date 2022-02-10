@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-test-{{ .Values.imageTag }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    environment: test-{{ .Values.imageTag }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  {{- range $domain := .Values.projects }}
+    - host: "{{- if ne $.Values.imageTag "staging"}}test{{ $.Values.imageTag }}.{{end}}{{ $domain.name }}.peckadesign.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: test-{{ $.Values.imageTag }}
+                port:
+                  number: 80
+
+    {{- range $mutation := $domain.mutations }}
+
+    - host: "{{- if ne $.Values.imageTag "staging"}}test{{ $.Values.imageTag }}.{{end}}{{ $domain.name }}-{{ $mutation }}.peckadesign.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: test-{{ $.Values.imageTag }}
+                port:
+                  number: 80
+    {{ end }}
+  {{ end }}

@@ -1,0 +1,17 @@
+projectName: ''
+registry: ''
+imageTag: 'staging'
+commitHash: ''
+projects:
+  - name: ''
+
+otherContainers:
+
+      
+volumes: false
+volumeMounts:
+
+jobs:
+#  - name: test
+#    replicas: 2
+#    command: php www/index.php test -m 1000

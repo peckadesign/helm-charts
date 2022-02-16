@@ -1,0 +1,28 @@
+{{- range $job := .Values.jobs }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $job.name }}-{{ $.Values.imageTag }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    environment: {{ $job.name }}-{{ $.Values.imageTag }}
+spec:
+  replicas: {{ $job.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $job.name }}-{{ $.Values.imageTag }}
+  template:
+    metadata:
+      annotations:
+        commit-hash: {{ $.Values.commitHash }}
+      labels:
+        app: {{ $job.name }}-{{ $.Values.imageTag }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ $job.name }}
+          image:  {{ $.Values.registry}}{{ $.Values.projectName }}:{{ $.Values.imageTag }}
+          imagePullPolicy: Always
+          command: [ '{{ $job.command }}' ]
+---
+{{ end }}

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: jobs
+description: PeckaDesign Jobs Chart
+
+type: application
+
+version: 0.1.0

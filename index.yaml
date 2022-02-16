@@ -1,50 +1,13 @@
 apiVersion: v1
 entries:
-  jobs:
-  - apiVersion: v2
-    created: "2022-02-16T09:40:47.697215894Z"
-    description: PeckaDesign Jobs Chart
-    digest: a8c8804604b191241446ac7cbe8af634bd828ddade73a6e4322544427f75e3cd
-    name: jobs
-    type: application
-    urls:
-    - https://github.com/peckadesign/helm-charts/releases/download/jobs-0.1.1/jobs-0.1.1.tgz
-    version: 0.1.1
   preview-app:
   - apiVersion: v2
-    created: "2022-02-16T09:18:06.06675+01:00"
+    created: "2022-02-16T09:49:15.63556958Z"
     description: PeckaDesign Preview App Chart
-    digest: 4357f73e26667478e73141b2e40dddbdcc2d6645976303347708b97ddd0eef3a
+    digest: 12ce73edc8b5fa458cf8dcc6146ed9e55f9732751e9426e9fb4a104be41eaef2
     name: preview-app
     type: application
     urls:
-    - packages/preview-app-0.1.3.tgz
-    version: 0.1.3
-  - apiVersion: v2
-    created: "2022-02-16T09:18:06.066519+01:00"
-    description: PeckaDesign Preview App Chart
-    digest: 504c4a1753e69cba567d1f28caa3c152adf8135432d9446748978dd0649b2ad4
-    name: preview-app
-    type: application
-    urls:
-    - packages/preview-app-0.1.2.tgz
-    version: 0.1.2
-  - apiVersion: v2
-    created: "2022-02-16T09:18:06.066282+01:00"
-    description: PeckaDesign Preview App Chart
-    digest: fc55a34195c1d18313263ae8cd55ed619e3b94e083d2c1e9274a935b5af22a5a
-    name: preview-app
-    type: application
-    urls:
-    - packages/preview-app-0.1.1.tgz
-    version: 0.1.1
-  - apiVersion: v2
-    created: "2022-02-16T09:18:06.066064+01:00"
-    description: PeckaDesign Preview App Chart
-    digest: 3927e78c307c9973d5c1977c09367184e00112670106b4ba5d3baaf6aec3cb3b
-    name: preview-app
-    type: application
-    urls:
-    - packages/preview-app-0.1.0.tgz
-    version: 0.1.0
-generated: "2022-02-16T09:40:47.697241694Z"
+    - https://github.com/peckadesign/helm-charts/releases/download/preview-app-0.1.4/preview-app-0.1.4.tgz
+    version: 0.1.4
+generated: "2022-02-16T09:49:15.63557868Z"

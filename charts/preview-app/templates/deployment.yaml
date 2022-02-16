@@ -23,26 +23,42 @@ spec:
         - name: test-{{ .Values.imageTag }}
           image: {{ .Values.registry}}{{ .Values.projectName }}:{{ .Values.imageTag }}
           imagePullPolicy: Always
-          {{ if .Values.mountVolumes }}
+          {{ if .Values.volumes }}
           volumeMounts:
           {{ end }}
 
-          {{- range $volume := .Values.volumes }}
+          {{- range $volume := .Values.volumeMounts }}
             - mountPath: {{ $volume.mountPath }}
               name: data
               subPath: {{ $volume.subPath }}
 
           {{ end }}
 
+          {{- range $domain := .Values.projects }}
 
-      {{ if .Values.redisContainer }}
-        - name: redis
-          image: redis:alpine
+          {{- range $mutation := $domain.mutations }}
+            {{ if $mutation.hasExport }}
+            - mountPath: {{ $mutation.exportDir }}
+              name: data
+              subPath: test-{{ $.Values.imageTag }}/{{ $mutation.lang }}-export
+            {{ end }}
+          {{ end }}
+          {{ end }}
+
+
+     
+        {{- range $container := .Values.otherContainers }}
+           
+        - name: {{ $container.name }}
+          image: {{ $container.image }}
           ports:
-            - containerPort: 6379
-      {{ end }}
+          {{- range $port  := $container.ports }}
+            - containerPort: {{ $port.containerPort}}
+          {{ end }}
+        {{ end }}
+      
 
-      {{ if .Values.mountVolumes }}
+      {{ if .Values.volumes }}
       volumes:
         - name: data
           persistentVolumeClaim:

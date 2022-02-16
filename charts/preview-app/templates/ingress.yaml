@@ -24,7 +24,9 @@ spec:
 
     {{- range $mutation := $domain.mutations }}
 
-    - host: "{{- if ne $.Values.imageTag "staging"}}test{{ $.Values.imageTag }}.{{end}}{{ $domain.name }}-{{ $mutation }}.peckadesign.com"
+    {{ if ne $mutation.lang "cz"}}
+
+    - host: "{{- if ne $.Values.imageTag "staging"}}test{{ $.Values.imageTag }}.{{end}}{{ $domain.name }}-{{ $mutation.lang }}.peckadesign.com"
       http:
         paths:
           - path: /
@@ -34,5 +36,6 @@ spec:
                 name: test-{{ $.Values.imageTag }}
                 port:
                   number: 80
+    {{ end }}
     {{ end }}
   {{ end }}

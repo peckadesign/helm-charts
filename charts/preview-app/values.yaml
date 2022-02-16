@@ -4,6 +4,10 @@ imageTag: 'staging'
 commitHash: ''
 projects:
   - name: ''
+    mutations:
+ 
+otherContainers:
 
-redisContainer: true
-mountVolumes: true
+      
+volumes: false
+volumeMounts:

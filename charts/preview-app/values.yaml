@@ -4,8 +4,7 @@ imageTag: 'staging'
 commitHash: ''
 projects:
   - name: ''
-    mutations:
- 
+
 otherContainers:
 
       

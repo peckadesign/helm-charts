@@ -12,6 +12,6 @@ volumes: false
 volumeMounts:
 
 jobs:
-#  - name: test
-#    replicas: 2
-#    command: php www/index.php test -m 1000
+  # - name: parameterFilterDelete
+    # replicas: 1
+    # command: 'bin/console rabbitmq:consumer parameterFilterDelete 600'

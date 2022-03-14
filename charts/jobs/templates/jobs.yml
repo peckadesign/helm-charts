@@ -2,27 +2,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $job.name }}-{{ $.Values.imageTag }}
+  name: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    environment: {{ $job.name }}-{{ $.Values.imageTag }}
+    environment: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
 spec:
   replicas: {{ $job.replicas }}
   selector:
     matchLabels:
-      app: {{ $job.name }}-{{ $.Values.imageTag }}
+      app: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
   template:
     metadata:
       annotations:
         commit-hash: {{ $.Values.commitHash }}
       labels:
-        app: {{ $job.name }}-{{ $.Values.imageTag }}
+        app: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
     spec:
       restartPolicy: Always
       containers:
-        - name: {{ $job.name }}
+        - name: {{ $job.name | lower }}
           image:  {{ $.Values.registry}}{{ $.Values.projectName }}:{{ $.Values.imageTag }}
           imagePullPolicy: Always
-          command: [ '{{ $job.command }}' ]
+          command: ["/bin/sh"]
+          args: ["-c", "{{ $job.command }}"]
 ---
 {{ end }}

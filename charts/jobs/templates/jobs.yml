@@ -15,6 +15,7 @@ spec:
     metadata:
       annotations:
         commit-hash: {{ $.Values.commitHash }}
+        rollme: {{ randAlphaNum 5 | quote }}
       labels:
         app: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
     spec:

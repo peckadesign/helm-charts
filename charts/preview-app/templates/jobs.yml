@@ -1,0 +1,32 @@
+{{- if .Values.useJobs}}
+{{- range $job := .Values.jobs }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    environment: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
+spec:
+  replicas: {{ $job.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
+  template:
+    metadata:
+      annotations:
+        commit-hash: {{ $.Values.commitHash }}
+        rollme: {{ randAlphaNum 5 | quote }}
+      labels:
+        app: {{ $.Values.imageTag }}-job-{{ $job.name | lower }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ $job.name | lower }}
+          image:  {{ $.Values.registry}}{{ $.Values.projectName }}:{{ $.Values.imageTag }}
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args: ["-c", "{{ $job.command }}"]
+---
+{{ end }}
+{{ end }}

@@ -10,3 +10,8 @@ otherContainers:
       
 volumes: false
 volumeMounts:
+useJobs: false
+jobs:
+#  - name: parameterFilterDelete
+#    replicas: 1
+#    command: 'bin/console rabbitmq:consumer parameterFilterDelete 600'

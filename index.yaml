@@ -30,6 +30,15 @@ entries:
     version: 0.1.2
   preview-app:
   - apiVersion: v2
+    created: "2022-05-18T13:16:53.150000073Z"
+    description: PeckaDesign Preview App Chart
+    digest: d52a00c17de156ad2e9b844140374a0e397edd23e0153d3190bc05f939ae8174
+    name: preview-app
+    type: application
+    urls:
+    - https://github.com/peckadesign/helm-charts/releases/download/preview-app-0.1.8/preview-app-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
     created: "2022-03-18T13:05:06.4395391Z"
     description: PeckaDesign Preview App Chart
     digest: e00de3cbeaab4b79d56829aa77c1ba2263e8050a39c379a83d0ec50296dc2ec3
@@ -56,4 +65,4 @@ entries:
     urls:
     - https://github.com/peckadesign/helm-charts/releases/download/preview-app-0.1.5/preview-app-0.1.5.tgz
     version: 0.1.5
-generated: "2022-03-18T13:05:06.4395558Z"
+generated: "2022-05-18T13:16:53.150021373Z"

@@ -24,6 +24,11 @@ spec:
         - name: test-{{ .Values.imageTag }}
           image: {{ .Values.registry}}{{ .Values.projectName }}:{{ .Values.imageTag }}
           imagePullPolicy: Always
+          env:
+            - name: PR_NUMBER
+              value: "{{- if ne $.Values.imageTag "staging"}}{{ .Values.imageTag }}{{end}}"
+            - name: ENV_PROJECT
+              value: "{{ .Values.projectName }}"
           {{ if .Values.volumes }}
           volumeMounts:
           {{ end }}

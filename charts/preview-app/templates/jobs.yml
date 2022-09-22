@@ -27,6 +27,17 @@ spec:
           imagePullPolicy: Always
           command: ["/bin/sh"]
           args: ["-c", "{{ $job.command }}"]
+
+          env:
+            - name: PR_NUMBER
+              value: "{{- if ne $.Values.imageTag "staging"}}{{ $.Values.imageTag }}{{end}}"
+            - name: ENV_PROJECT
+              value: "{{ $.Values.projectName }}"
+          {{- range $env := $.Values.envs }}
+            - name: {{ $env.name }}
+              value: {{ $env.value }}
+          {{ end }}
+
           {{ if $.Values.volumes }}
           volumeMounts:
           {{ end }}

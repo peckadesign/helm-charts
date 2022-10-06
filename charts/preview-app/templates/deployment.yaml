@@ -65,6 +65,13 @@ spec:
           {{- range $port  := $container.ports }}
             - containerPort: {{ $port.containerPort}}
           {{ end }}
+          {{- if $container.envs }}
+          env:
+          {{- range $env := $container.envs }}
+            - name: {{ $env.name }}
+              value: {{ $env.value }}
+          {{ end }}
+          {{ end }}
         {{ end }}
       
 

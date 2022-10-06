@@ -31,7 +31,7 @@ spec:
               value: "{{ .Values.projectName }}"
           {{- range $env := .Values.envs }}
             - name: {{ $env.name }}
-              value: {{ $env.value }}
+              value: {{ $env.value | quote }}
           {{ end }}
           {{ if .Values.volumes }}
           volumeMounts:
@@ -69,7 +69,7 @@ spec:
           env:
           {{- range $env := $container.envs }}
             - name: {{ $env.name }}
-              value: {{ $env.value }}
+              value: {{ $env.value | quote }}
           {{ end }}
           {{ end }}
         {{ end }}

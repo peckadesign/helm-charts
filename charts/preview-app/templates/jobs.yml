@@ -35,7 +35,7 @@ spec:
               value: "{{ $.Values.projectName }}"
           {{- range $env := $.Values.envs }}
             - name: {{ $env.name }}
-              value: {{ $env.value }}
+              value: {{ $env.value | quote }}
           {{ end }}
 
           {{ if $.Values.volumes }}

@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-{{ .Values.imageTag }}
+  name: {{ .Values.projectName }}-test-{{ .Values.suffix }}
   namespace: {{ .Release.Namespace }}
   labels:
-    environment: test-{{ .Values.imageTag }}
+    environment: {{ .Values.projectName }}-test-{{ .Values.suffix }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   replicas: 1
   revisionHistoryLimit: 1
   selector:
     matchLabels:
-      app: test-{{ .Values.imageTag }}
+      app: {{ .Values.projectName }}-test-{{ .Values.suffix }}
   template:
     metadata:
       annotations:
-        commit-hash: {{ .Values.commitHash }}
+        commit-hash: {{ .Values.commitHash | default "1" | quote }}
         rollme: {{ randAlphaNum 5 | quote }}
       labels:
-        app: test-{{ .Values.imageTag }}
+        app: {{ .Values.projectName }}-test-{{ .Values.suffix }}
     spec:
       containers:
-        - name: test-{{ .Values.imageTag }}
-          image: {{ .Values.registry}}{{ .Values.projectName }}:{{ .Values.imageTag }}
+        - name: {{ .Values.projectName }}-test-{{ .Values.suffix }}
+          image: {{ .Values.registry}}/{{ .Values.projectName }}:{{ .Values.imageTag }}
           imagePullPolicy: Always
           env:
             - name: PR_NUMBER
-              value: "{{- if ne $.Values.imageTag "staging"}}{{ .Values.imageTag }}{{end}}"
+              value: "{{- if ne $.Values.suffix "staging"}}{{ .Values.imageTag }}{{end}}"
             - name: ENV_PROJECT
               value: "{{ .Values.projectName }}"
           {{- range $env := .Values.envs }}
@@ -50,7 +50,7 @@ spec:
             {{ if $mutation.hasExport }}
             - mountPath: {{ $mutation.exportDir }}
               name: data
-              subPath: test-{{ $.Values.imageTag }}/{{ $mutation.lang }}-export
+              subPath: test-{{ $.Values.suffix }}/{{ $mutation.lang }}-export
             {{ end }}
           {{ end }}
           {{ end }}

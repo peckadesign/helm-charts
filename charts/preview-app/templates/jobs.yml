@@ -3,22 +3,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: job-{{ $.Values.imageTag }}-{{ $job.name | lower }}
+  name: job-{{ $.Values.suffix }}-{{ $job.name | lower }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    environment: job-{{ $.Values.imageTag }}-{{ $job.name | lower }}
+    environment: job-{{ $.Values.suffix }}-{{ $job.name | lower }}
 spec:
   replicas: {{ $job.replicas }}
   selector:
     matchLabels:
-      app: job-{{ $.Values.imageTag }}-{{ $job.name | lower }}
+      app: job-{{ $.Values.suffix }}-{{ $job.name | lower }}
   template:
     metadata:
       annotations:
         commit-hash: {{ $.Values.commitHash }}
         rollme: {{ randAlphaNum 5 | quote }}
       labels:
-        app: job-{{ $.Values.imageTag }}-{{ $job.name | lower }}
+        app: job-{{ $.Values.suffix }}-{{ $job.name | lower }}
     spec:
       restartPolicy: Always
       containers:
@@ -30,7 +30,7 @@ spec:
 
           env:
             - name: PR_NUMBER
-              value: "{{- if ne $.Values.imageTag "staging"}}{{ $.Values.imageTag }}{{end}}"
+              value: "{{- if ne $.Values.suffix "staging"}}{{ $.Values.suffix }}{{end}}"
             - name: ENV_PROJECT
               value: "{{ $.Values.projectName }}"
           {{- range $env := $.Values.envs }}
@@ -55,7 +55,7 @@ spec:
             {{ if $mutation.hasExport }}
             - mountPath: {{ $mutation.exportDir }}
               name: data
-              subPath: test-{{ $.Values.imageTag }}/{{ $mutation.lang }}-export
+              subPath: test-{{ $.Values.suffix }}/{{ $mutation.lang }}-export
             {{ end }}
           {{ end }}
           {{ end }}

@@ -1,11 +1,11 @@
-{{- if .Values.postInstallJob.enabled }}
+{{- if .Values.postInstallJob }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}"
+  name: "{{ .Release.Name }}-{{ .Values.postInstallJob.name }}-hook"
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/instance: "{{ .Release.Name }}-{{ .Values.postInstallJob.name }}-hook"
     app.kubernetes.io/version: {{ .Chart.Version }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   annotations:
@@ -26,6 +26,6 @@ spec:
       - name: post-install-job
         image: "{{ .Values.postInstallJob.imageName }}:{{ .Values.postInstallJob.imageTag }}"
         command: {{ toYaml .Values.postInstallJob.command | nindent 10 }}
-        args: {{ tpl (toYaml .Values.postInstallJob.args) . | nindent 10}}
+        args: {{ toYaml .Values.postInstallJob.args | nindent 10 }}
         workingDir: {{ .Values.postInstallJob.workingDir | quote }}
 {{- end }}

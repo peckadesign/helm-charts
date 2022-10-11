@@ -4,14 +4,14 @@ imageTag: 'staging'
 commitHash: ''
 projects:
   - name: ''
-
-otherContainers:
-
-      
+otherContainers: []
+service: {}
 volumes: false
-volumeMounts:
+volumeMounts: {}
 useJobs: false
-jobs:
+ingress:
+  enabled: true
+jobs: {}
 #  - name: parameterFilterDelete
 #    replicas: 1
 #    command: 'bin/console rabbitmq:consumer parameterFilterDelete 600'

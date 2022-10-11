@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-{{ .Values.imageTag }}
+  name: {{ include "fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    environment: test-{{ .Values.imageTag }}
+    environment: {{ include "fullname" . }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   selector:
-    app: test-{{ .Values.imageTag }}
+    app: {{ include "fullname" . }}
   ports:
-    - port: 80
+    - port: {{ .Values.service.port | default 80 }}
+  type: {{ .Values.service.type | default "ClusterIP" }}

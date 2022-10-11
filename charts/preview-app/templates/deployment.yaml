@@ -1,83 +1,84 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-{{ .Values.imageTag }}
+  name: {{ include "fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    environment: test-{{ .Values.imageTag }}
+    environment: {{ include "fullname" . }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 spec:
   replicas: 1
   revisionHistoryLimit: 1
   selector:
     matchLabels:
-      app: test-{{ .Values.imageTag }}
+      app: {{ include "fullname" . }}
   template:
     metadata:
       annotations:
-        commit-hash: {{ .Values.commitHash }}
+        commit-hash: {{ .Values.commitHash | quote }}
         rollme: {{ randAlphaNum 5 | quote }}
       labels:
-        app: test-{{ .Values.imageTag }}
+        app: {{ include "fullname" . }}
     spec:
       containers:
-        - name: test-{{ .Values.imageTag }}
-          image: {{ .Values.registry}}{{ .Values.projectName }}:{{ .Values.imageTag }}
+        - name: {{ .Values.projectName }}
+          image: {{ .Values.registry}}/{{ .Values.projectName }}:{{ .Values.imageTag }}
           imagePullPolicy: Always
           env:
+            {{- if ne $.Values.imageTag "staging" }}
             - name: PR_NUMBER
-              value: "{{- if ne $.Values.imageTag "staging"}}{{ .Values.imageTag }}{{end}}"
+              value: {{ .Values.imageTag | quote }}
+            {{- end }}
             - name: ENV_PROJECT
               value: "{{ .Values.projectName }}"
-          {{- range $env := .Values.envs }}
+            {{- range $env := .Values.envs }}
             - name: {{ $env.name }}
               value: {{ $env.value | quote }}
-          {{ end }}
-          {{ if .Values.volumes }}
+            {{- end }}
+          {{- if .Values.ports }}
+          ports:
+            {{- range $port  := .Values.ports }}
+            - containerPort: {{ $port.containerPort }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.volumes }}
           volumeMounts:
-          {{ end }}
-
-          {{- range $volume := .Values.volumeMounts }}
+            {{- range $volume := .Values.volumeMounts }}
             - mountPath: {{ $volume.mountPath }}
               name: data
               subPath: {{ $volume.subPath }}
+            {{- end }}
 
-          {{ end }}
-
-          {{- range $domain := .Values.projects }}
-
-          {{- range $mutation := $domain.mutations }}
-            {{ if $mutation.hasExport }}
+            {{- range $domain := .Values.projects }}
+            {{- range $mutation := $domain.mutations }}
+            {{- if $mutation.hasExport }}
             - mountPath: {{ $mutation.exportDir }}
               name: data
               subPath: test-{{ $.Values.imageTag }}/{{ $mutation.lang }}-export
-            {{ end }}
-          {{ end }}
-          {{ end }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
+          {{- end }}
 
-
-     
         {{- range $container := .Values.otherContainers }}
-           
         - name: {{ $container.name }}
           image: {{ $container.image }}
           ports:
-          {{- range $port  := $container.ports }}
-            - containerPort: {{ $port.containerPort}}
-          {{ end }}
+            {{- range $port  := $container.ports }}
+            - containerPort: {{ $port.containerPort }}
+            {{- end }}
           {{- if $container.envs }}
           env:
-          {{- range $env := $container.envs }}
+            {{- range $env := $container.envs }}
             - name: {{ $env.name }}
               value: {{ $env.value | quote }}
-          {{ end }}
-          {{ end }}
-        {{ end }}
-      
+            {{- end }}
+          {{- end }}
+        {{- end }}
 
-      {{ if .Values.volumes }}
+      {{- if .Values.volumes }}
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: {{ .Values.projectName }}-nfs-pvc
-      {{ end }}
+      {{- end }}

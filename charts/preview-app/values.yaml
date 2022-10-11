@@ -9,9 +9,9 @@ service: {}
 volumes: false
 volumeMounts: {}
 useJobs: false
-jobs: {}
 ingress:
-  enabled: false
+  enabled: true
+jobs: {}
 #  - name: parameterFilterDelete
 #    replicas: 1
 #    command: 'bin/console rabbitmq:consumer parameterFilterDelete 600'

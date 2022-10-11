@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       annotations:
-        commit-hash: {{ .Values.commitHash | default "1" | quote }}
+        commit-hash: {{ .Values.commitHash | quote }}
         rollme: {{ randAlphaNum 5 | quote }}
       labels:
         app: {{ include "fullname" . }}
@@ -43,20 +43,19 @@ spec:
           {{- end }}
           {{- if .Values.volumes }}
           volumeMounts:
-          {{- end }}
-
-          {{- range $volume := .Values.volumeMounts }}
+            {{- range $volume := .Values.volumeMounts }}
             - mountPath: {{ $volume.mountPath }}
               name: data
               subPath: {{ $volume.subPath }}
-          {{- end }}
+            {{- end }}
 
-          {{- range $domain := .Values.projects }}
+            {{- range $domain := .Values.projects }}
             {{- range $mutation := $domain.mutations }}
             {{- if $mutation.hasExport }}
             - mountPath: {{ $mutation.exportDir }}
               name: data
               subPath: test-{{ $.Values.imageTag }}/{{ $mutation.lang }}-export
+            {{- end }}
             {{- end }}
             {{- end }}
           {{- end }}
